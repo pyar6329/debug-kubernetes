@@ -1,0 +1,34 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    service: debug-kubernetes
+  name: debug-kubernetes
+spec:
+  minReadySeconds: 10
+  progressDeadlineSeconds: 300
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      service: debug-kubernetes
+  strategy:
+    rollingUpdate:
+      maxSurge: 30%
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        service: debug-kubernetes
+    spec:
+      containers:
+        - image: pyar6329/debug-kubernetes:1.0
+          name: debug-kubernetes
+          resources:
+            limits:
+              cpu: 10m
+            requests:
+              cpu: 10m
+      restartPolicy: Always
+status: {}
