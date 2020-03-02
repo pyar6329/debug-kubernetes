@@ -1,8 +1,6 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    service: debug-kubernetes
   name: debug-kubernetes
 spec:
   minReadySeconds: 10
@@ -11,7 +9,7 @@ spec:
   revisionHistoryLimit: 5
   selector:
     matchLabels:
-      service: debug-kubernetes
+      app: debug-kubernetes
   strategy:
     rollingUpdate:
       maxSurge: 30%
@@ -20,10 +18,10 @@ spec:
   template:
     metadata:
       labels:
-        service: debug-kubernetes
+        app: debug-kubernetes
     spec:
       containers:
-        - image: pyar6329/debug-kubernetes:1.0
+        - image: pyar6329/debug-kubernetes:2.0
           name: debug-kubernetes
           resources:
             limits:
