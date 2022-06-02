@@ -21,7 +21,7 @@ spec:
         app: debug-kubernetes
     spec:
       containers:
-        - image: pyar6329/debug-kubernetes:3.0
+        - image: pyar6329/debug-kubernetes:4.0
           name: debug-kubernetes
           resources:
             limits:

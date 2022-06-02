@@ -1,14 +1,18 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
-ENV WORKDIR=/debug \
-    LANG="C.UTF-8" \
+ENV LANG="C.UTF-8" \
     LC_ALL="C.UTF-8" \
     DEBIAN_FRONTEND=noninteractive
 
+ARG USERNAME=ubuntu
+ARG GROUPNAME=ubuntu
+ARG UID=1000
+ARG GID=1000
 ARG POSTGRESQL_CLIENT_VERSION="12"
 
 RUN set -x \
-  && mkdir -p "${WORKDIR}" \
+  && groupadd -g $GID $GROUPNAME \
+  && useradd -m -s /bin/bash -u $UID -g $GID $USERNAME \
   && apt-get update -y \
   && apt-get install -y --no-install-recommends curl wget ca-certificates gnupg dirmngr lsb-release \
   && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
@@ -26,6 +30,7 @@ RUN set -x \
   && echo 'alias redis="redis-cli"' | tee -a /root/.bashrc \
   && echo 'alias grpc="grpcurl"' | tee -a /root/.bashrc
 
-WORKDIR ${WORKDIR}
+USER $USERNAME
+WORKDIR /home/$USERNAME
 
 CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
