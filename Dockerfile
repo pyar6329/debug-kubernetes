@@ -19,11 +19,15 @@ RUN set -x \
   && RELEASE=$(lsb_release -cs) \
   && echo "deb http://apt.postgresql.org/pub/repos/apt/ ${RELEASE}-pgdg main" | tee -a /etc/apt/sources.list.d/pgdg.list \
   && apt-get update -y \
-  && apt-get install -y --no-install-recommends vim iputils-ping net-tools dnsutils postgresql-client-${POSTGRESQL_CLIENT_VERSION} redis-tools jq \
+  && apt-get install -y --no-install-recommends vim iputils-ping net-tools dnsutils postgresql-client-${POSTGRESQL_CLIENT_VERSION} redis-tools jq unzip less \
   && curl -sL -o /usr/local/bin/yq $(curl -sL https://api.github.com/repos/mikefarah/yq/releases/latest | jq -r '.assets[] | select(.name == "yq_linux_amd64") | .browser_download_url') \
   && curl -sL $(curl -sL https://api.github.com/repos/fullstorydev/grpcurl/releases/latest | jq -r '.assets[] | select(.name | contains("linux_x86_64.tar.gz")) | .browser_download_url') | tar zx -C /usr/local/bin 'grpcurl' \
   && curl -sL $(curl -sL https://api.github.com/repos/ktr0731/evans/releases/latest | jq -r '.assets[] | select(.name | contains("evans_linux_amd64.tar.gz")) | .browser_download_url') | tar zx -C /usr/local/bin 'evans' \
   && chmod +x  /usr/local/bin/* \
+  && curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+  && unzip awscliv2.zip \
+  && ./aws/install \
+  && rm -rf aws awscliv2.zip \
   && apt-get purge -y --auto-remove gnupg dirmngr lsb-release \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /root/.[pw]* \
