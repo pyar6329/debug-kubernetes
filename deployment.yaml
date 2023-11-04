@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: debug-kubernetes
+  name: debug-ubuntu
 spec:
   minReadySeconds: 10
   progressDeadlineSeconds: 300
@@ -9,7 +9,7 @@ spec:
   revisionHistoryLimit: 5
   selector:
     matchLabels:
-      app: debug-kubernetes
+      app: debug-ubuntu
   strategy:
     rollingUpdate:
       maxSurge: 30%
@@ -18,11 +18,11 @@ spec:
   template:
     metadata:
       labels:
-        app: debug-kubernetes
+        app: debug-ubuntu
     spec:
       containers:
         - image: pyar6329/debug-kubernetes:5.0
-          name: debug-kubernetes
+          name: debug-ubuntu
           resources:
             limits:
               cpu: 10m
@@ -30,3 +30,14 @@ spec:
               cpu: 10m
       restartPolicy: Always
 status: {}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  namespace: default
+  name: debug-ubuntu
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: debug-ubuntu
