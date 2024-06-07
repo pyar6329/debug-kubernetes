@@ -19,7 +19,7 @@ RUN set -x \
   && RELEASE=$(lsb_release -cs) \
   && echo "deb http://apt.postgresql.org/pub/repos/apt/ ${RELEASE}-pgdg main" | tee -a /etc/apt/sources.list.d/pgdg.list \
   && apt-get update -y \
-  && apt-get install -y --no-install-recommends vim iputils-ping net-tools dnsutils postgresql-client-${POSTGRESQL_CLIENT_VERSION} redis-tools jq unzip less \
+  && apt-get install -y --no-install-recommends vim iputils-ping net-tools dnsutils postgresql-client-${POSTGRESQL_CLIENT_VERSION} redis-tools jq unzip less swaks \
   && curl -sL -o /usr/local/bin/yq $(curl -sL https://api.github.com/repos/mikefarah/yq/releases/latest | jq -r '.assets[] | select(.name == "yq_linux_amd64") | .browser_download_url') \
   && curl -sL $(curl -sL https://api.github.com/repos/fullstorydev/grpcurl/releases/latest | jq -r '.assets[] | select(.name | contains("linux_x86_64.tar.gz")) | .browser_download_url') | tar zx -C /usr/local/bin 'grpcurl' \
   && curl -sL $(curl -sL https://api.github.com/repos/ktr0731/evans/releases/latest | jq -r '.assets[] | select(.name | contains("evans_linux_amd64.tar.gz")) | .browser_download_url') | tar zx -C /usr/local/bin 'evans' \
