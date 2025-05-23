@@ -15,13 +15,14 @@ RUN set -x \
   && useradd -m -s /bin/bash -u $UID -g $GID $USERNAME \
   && apt-get update -y \
   && apt-get install -y --no-install-recommends curl wget ca-certificates gnupg dirmngr lsb-release \
+  && apt-get install -y mysql-client \
   && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
   && RELEASE=$(lsb_release -cs) \
   && echo "deb http://apt.postgresql.org/pub/repos/apt/ ${RELEASE}-pgdg main" | tee -a /etc/apt/sources.list.d/pgdg.list \
   && apt-get update -y \
   && apt-get install -y --no-install-recommends vim iputils-ping net-tools dnsutils postgresql-client-${POSTGRESQL_CLIENT_VERSION} redis-tools jq unzip less swaks \
   && curl -sL -o /usr/local/bin/yq $(curl -sL https://api.github.com/repos/mikefarah/yq/releases/latest | jq -r '.assets[] | select(.name == "yq_linux_amd64") | .browser_download_url') \
-  && curl -sL $(curl -sL https://api.github.com/repos/fullstorydev/grpcurl/releases/latest | jq -r '.assets[] | select(.name | contains("linux_x86_64.tar.gz")) | .browser_download_url') | tar zx -C /usr/local/bin 'grpcurl' \
+  && curl -sL $(curl -sL https://api.github.com/repos/fullstorydev/grpcurl/releases/latest | jq -r '.assets[] | select(.name | contains("linux_x86_64.tar.gz")) | .browser_download_url') | tar zx --no-same-owner -C /usr/local/bin 'grpcurl' \
   && curl -sL $(curl -sL https://api.github.com/repos/ktr0731/evans/releases/latest | jq -r '.assets[] | select(.name | contains("evans_linux_amd64.tar.gz")) | .browser_download_url') | tar zx -C /usr/local/bin 'evans' \
   && chmod +x  /usr/local/bin/* \
   && curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
